@@ -1,16 +1,43 @@
 const rows = 10;
 const columns = 20;
-const mines = 10;
+const mines = 60;
 const grid = Array.from({length: columns}, e => Array(rows).fill(0));
 
-function boxClick (event) {
-  console.log('click', event.target.id);
-  const box = event.target;
-  box.classList.remove("hidden");
-  const [x, y] = box.id.split("-").map(cord => parseInt(cord));
-  console.log(x, y, typeof x, typeof y);
-  const text = grid[x][y] == -1 ? "X" : grid[x][y] == 0 ? "" : grid[x][y];
+function clearBox(col, row) {
+  const box = document.getElementById(`${col}-${row}`);
+  const text = grid[col][row] == -1 ? "X" : grid[col][row] == 0 ? "" : grid[col][row];
   box.innerHTML = text;
+  if (box.classList.contains("hidden")) {
+    box.classList.remove("hidden");
+    if (grid[col][row] === -1) {
+      console.log("haha lose");
+    } else {
+      for (let x = -1; x <= 1; x++) {
+        for (let y = -1; y <= 1; y++) {
+          if (x === 0 && y === 0) continue;
+          const x_cord = col + x;
+          const y_cord = row + y;
+          if (x_cord < 0 || x_cord >= columns) continue;
+          if (y_cord < 0 || y_cord >= rows) continue;
+          if (grid[x_cord][y_cord] === -1) continue;
+          clearBox(x_cord, y_cord)
+        }
+      }
+    }
+  }
+}
+
+function boxClick (event) {
+  const box = event.target;
+  if (box.classList.contains("hidden")) {
+    const [x, y] = box.id.split("-").map(cord => parseInt(cord));
+    clearBox(x, y)
+  }
+
+  // box.classList.remove("hidden");
+  // console.log(x, y, typeof x, typeof y);
+  // const text = grid[x][y] == -1 ? "X" : grid[x][y] == 0 ? "" : grid[x][y];
+  // box.innerHTML = text;
 }
 
 function generateBox(col, row) {
@@ -51,18 +78,15 @@ function generateMines(mines, columns, rows) {
       mine_x = getRandomInt(columns);
       mine_y = getRandomInt(rows);
     } while(grid[mine_x][mine_y] == -1);
-    console.log(mine_x, mine_y)
     grid[mine_x][mine_y] = -1;
-    for (let x = -1; x < 2; x++) {
-      console.log("x", x)
-      for (let y = -1; y < 2; y++) {
-        if (x === 0 && y === 0) break;
+    for (let x = -1; x <= 1; x++) {
+      for (let y = -1; y <= 1; y++) {
+        if (x === 0 && y === 0) continue;
         const x_cord = mine_x + x;
         const y_cord = mine_y + y;
-        if (x_cord < 0 || x_cord >= columns) break;
-        if (y_cord < 0 || y_cord >= rows) break;
-        if (grid[x_cord][y_cord] === -1) break;
-        console.log("wiii")
+        if (x_cord < 0 || x_cord >= columns) continue;
+        if (y_cord < 0 || y_cord >= rows) continue;
+        if (grid[x_cord][y_cord] === -1) continue;
         grid[x_cord][y_cord] += 1;
       }
     }
