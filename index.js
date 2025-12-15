@@ -1,13 +1,12 @@
-console.log("hola")
-
 const rows = 10;
 const columns = 20;
-
+const mines = 10;
+const grid = []
 
 function generateBox(col, row) {
   const box = document.createElement("div");
-  box.innerHTML = "1";
   box.classList.add("box");
+  box.classList.add("hidden");
   box.id = `${col}-${row}`
   return box;
 }
@@ -21,10 +20,8 @@ function generateColumn(col, rows) {
   return column;
 }
 
-
 function generateGrid(columns, rows) {
   const grid = document.getElementsByClassName("game")[0];
-  console.log(grid);
   for(let i = 0; i < columns; i++) {
     grid.appendChild(generateColumn(i, rows));
   }

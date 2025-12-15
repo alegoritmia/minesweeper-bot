@@ -18,3 +18,10 @@
   height: var(--box-size);
 }
 
+.hidden {
+  background-color: gray;
+}
+
+.hidden:hover {
+  background-color: lightgray;
+}
