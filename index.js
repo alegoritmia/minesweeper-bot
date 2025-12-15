@@ -11,7 +11,7 @@ function clearBox(col, row) {
     box.classList.remove("hidden");
     if (grid[col][row] === -1) {
       console.log("haha lose");
-    } else {
+    } else if (grid[col][row] === 0) {
       for (let x = -1; x <= 1; x++) {
         for (let y = -1; y <= 1; y++) {
           if (x === 0 && y === 0) continue;
