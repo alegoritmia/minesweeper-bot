@@ -4,6 +4,7 @@ const mines = 60;
 const grid = Array.from({length: columns}, e => Array(rows).fill(0));
 const gridStatus = Array.from({length: columns}, e => Array(rows).fill(0));
 
+// Show text of cell
 function showBoxText(box, col, row) {
   const text = grid[col][row] == -1 ? "X" : grid[col][row] == 0 ? "" : grid[col][row];
   box.innerHTML = text;
@@ -11,6 +12,7 @@ function showBoxText(box, col, row) {
   box.classList.add("clicked");
 }
 
+// Show text of cell and surrounding cells
 function clearBox(col, row) {
   const box = document.getElementById(`${col}-${row}`);
   const text = grid[col][row] == -1 ? "X" : grid[col][row] == 0 ? "" : grid[col][row];
@@ -36,6 +38,7 @@ function clearBox(col, row) {
   }
 }
 
+// Unhide surroinding cells when flags around cell are met
 function showAround(col, row) {
   const box = document.getElementById(`${col}-${row}`);
   let cantFlags = 0;
@@ -81,6 +84,7 @@ function showAround(col, row) {
   }
 }
 
+// Handle logic for right click
 function boxClick (event) {
   const box = event.target;
   const [x, y] = box.id.split("-").map(cord => parseInt(cord));
@@ -97,6 +101,7 @@ function boxClick (event) {
   // box.innerHTML = text;
 }
 
+// Handle logic for left click
 function boxLeftClick (event) {
   event.preventDefault();
   const box = event.target;
@@ -110,6 +115,7 @@ function boxLeftClick (event) {
   }
 }
 
+// Generate singular box in grid
 function generateBox(col, row) {
   const box = document.createElement("div");
   box.classList.add("box");
@@ -120,6 +126,7 @@ function generateBox(col, row) {
   return box;
 }
 
+// Generate column of boxes in grid
 function generateColumn(col, rows) {
   const column = document.createElement("div");
   column.classList.add("column");
@@ -129,14 +136,16 @@ function generateColumn(col, rows) {
   return column;
 }
 
+// Generate whole grid
 function generateGrid(columns, rows) {
   const grid = document.getElementsByClassName("game")[0];
+  grid.innerHTML = '';
   for(let i = 0; i < columns; i++) {
     grid.appendChild(generateColumn(i, rows));
   }
 }
 
-generateGrid(columns, rows);
+// generateGrid(columns, rows);
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
@@ -164,11 +173,25 @@ function generateMines(mines, columns, rows) {
   }
 }
 
-generateMines(mines, columns, rows);
+function startGame() {
+  console.log("starting game");
+  generateGrid(columns, rows);
+  generateMines(mines, columns, rows);
+}
+
+startGame();
+
+// generateMines(mines, columns, rows);
 console.log(grid);
 // grid[0][0] = 1;
 // grid[10][3] = 1;
 
+window.addEventListener('load', (event) => {
+  const button = document.getElementsByTagName("button")[0];
+  console.log(button);
+  button.onclick = startGame;
+  // Code to execute after full page load
+});
 
 // grid = [n,m]   // initialize all cells to 0
 // for k = 1 to number_of_mines
