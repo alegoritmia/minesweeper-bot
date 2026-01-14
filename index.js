@@ -2,6 +2,7 @@ const rows = 10;
 const columns = 20;
 const mines = 60;
 const grid = Array.from({length: columns}, e => Array(rows).fill(0));
+const gridStatus = Array.from({length: columns}, e => Array(rows).fill(0));
 
 function clearBox(col, row) {
   const box = document.getElementById(`${col}-${row}`);
@@ -40,12 +41,26 @@ function boxClick (event) {
   // box.innerHTML = text;
 }
 
+function boxLeftClick (event) {
+  event.preventDefault();
+  const box = event.target;
+  if (box.classList.contains("hidden")) {
+    const [x, y] = box.id.split("-").map(cord => parseInt(cord));
+    box.classList.remove("hidden");
+    box.classList.add("flag");
+  } else if (box.classList.contains("flag")) {
+    box.classList.remove("flag");
+    box.classList.add("hidden");
+  }
+}
+
 function generateBox(col, row) {
   const box = document.createElement("div");
   box.classList.add("box");
   box.classList.add("hidden");
   box.id = `${col}-${row}`
   box.onclick = boxClick;
+  box.oncontextmenu = boxLeftClick;
   return box;
 }
 

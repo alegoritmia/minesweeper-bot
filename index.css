@@ -25,3 +25,11 @@
 .hidden:hover {
   background-color: lightgray;
 }
+
+.flag {
+  background-color: red;
+}
+
+.flag:hover {
+  background-color: lightcoral;
+}
