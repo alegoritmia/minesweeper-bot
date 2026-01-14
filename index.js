@@ -4,12 +4,20 @@ const mines = 60;
 const grid = Array.from({length: columns}, e => Array(rows).fill(0));
 const gridStatus = Array.from({length: columns}, e => Array(rows).fill(0));
 
+function showBoxText(box, col, row) {
+  const text = grid[col][row] == -1 ? "X" : grid[col][row] == 0 ? "" : grid[col][row];
+  box.innerHTML = text;
+  box.classList.remove("hidden");
+  box.classList.add("clicked");
+}
+
 function clearBox(col, row) {
   const box = document.getElementById(`${col}-${row}`);
   const text = grid[col][row] == -1 ? "X" : grid[col][row] == 0 ? "" : grid[col][row];
   box.innerHTML = text;
   if (box.classList.contains("hidden")) {
     box.classList.remove("hidden");
+    box.classList.add("clicked");
     if (grid[col][row] === -1) {
       console.log("haha lose");
     } else if (grid[col][row] === 0) {
@@ -28,11 +36,59 @@ function clearBox(col, row) {
   }
 }
 
+function showAround(col, row) {
+  const box = document.getElementById(`${col}-${row}`);
+  let cantFlags = 0;
+  console.log("set up")
+  for (let x = -1; x <= 1; x++) {
+    for (let y = -1; y <= 1; y++) {
+      if (x === 0 && y === 0) continue;
+      const x_cord = col + x;
+      const y_cord = row + y;
+      if (x_cord < 0 || x_cord >= columns) continue;
+      if (y_cord < 0 || y_cord >= rows) continue;
+      // if (grid[x_cord][y_cord] === -1) continue;
+      const secondBox = document.getElementById(`${x_cord}-${y_cord}`);
+      console.log("checking second box flag", secondBox);
+
+      if (secondBox.classList.contains("flag")) {
+        cantFlags++;
+        console.log("cantfalgs++")
+      }
+    }
+  }
+
+  console.log("cantfalgs", cantFlags)
+
+  if (cantFlags == grid[col][row]) {
+    console.log("flags match")
+    for (let x = -1; x <= 1; x++) {
+    for (let y = -1; y <= 1; y++) {
+      if (x === 0 && y === 0) continue;
+      const x_cord = col + x;
+      const y_cord = row + y;
+      if (x_cord < 0 || x_cord >= columns) continue;
+      if (y_cord < 0 || y_cord >= rows) continue;
+      // if (grid[x_cord][y_cord] === -1) continue;
+      const secondBox = document.getElementById(`${x_cord}-${y_cord}`);
+      console.log("checking second box", secondBox);
+      if (secondBox.classList.contains("hidden")) {
+        console.log("clicked")
+        showBoxText(secondBox, x_cord, y_cord);
+      }
+    }
+  }
+  }
+}
+
 function boxClick (event) {
   const box = event.target;
+  const [x, y] = box.id.split("-").map(cord => parseInt(cord));
   if (box.classList.contains("hidden")) {
-    const [x, y] = box.id.split("-").map(cord => parseInt(cord));
-    clearBox(x, y)
+    clearBox(x, y);
+  } else if (box.classList.contains("clicked")) {
+    console.log("show around")
+    showAround(x, y);
   }
 
   // box.classList.remove("hidden");
