@@ -42,7 +42,6 @@ function clearBox(col, row) {
 function showAround(col, row) {
   const box = document.getElementById(`${col}-${row}`);
   let cantFlags = 0;
-  console.log("set up")
   for (let x = -1; x <= 1; x++) {
     for (let y = -1; y <= 1; y++) {
       if (x === 0 && y === 0) continue;
@@ -50,21 +49,15 @@ function showAround(col, row) {
       const y_cord = row + y;
       if (x_cord < 0 || x_cord >= columns) continue;
       if (y_cord < 0 || y_cord >= rows) continue;
-      // if (grid[x_cord][y_cord] === -1) continue;
       const secondBox = document.getElementById(`${x_cord}-${y_cord}`);
-      console.log("checking second box flag", secondBox);
 
       if (secondBox.classList.contains("flag")) {
         cantFlags++;
-        console.log("cantfalgs++")
       }
     }
   }
 
-  console.log("cantfalgs", cantFlags)
-
   if (cantFlags == grid[col][row]) {
-    console.log("flags match")
     for (let x = -1; x <= 1; x++) {
     for (let y = -1; y <= 1; y++) {
       if (x === 0 && y === 0) continue;
@@ -72,11 +65,8 @@ function showAround(col, row) {
       const y_cord = row + y;
       if (x_cord < 0 || x_cord >= columns) continue;
       if (y_cord < 0 || y_cord >= rows) continue;
-      // if (grid[x_cord][y_cord] === -1) continue;
       const secondBox = document.getElementById(`${x_cord}-${y_cord}`);
-      console.log("checking second box", secondBox);
       if (secondBox.classList.contains("hidden")) {
-        console.log("clicked")
         showBoxText(secondBox, x_cord, y_cord);
       }
     }
@@ -91,14 +81,8 @@ function boxClick (event) {
   if (box.classList.contains("hidden")) {
     clearBox(x, y);
   } else if (box.classList.contains("clicked")) {
-    console.log("show around")
     showAround(x, y);
   }
-
-  // box.classList.remove("hidden");
-  // console.log(x, y, typeof x, typeof y);
-  // const text = grid[x][y] == -1 ? "X" : grid[x][y] == 0 ? "" : grid[x][y];
-  // box.innerHTML = text;
 }
 
 // Handle logic for left click
@@ -174,31 +158,13 @@ function generateMines(mines, columns, rows) {
 }
 
 function startGame() {
-  console.log("starting game");
   generateGrid(columns, rows);
   generateMines(mines, columns, rows);
 }
 
 startGame();
 
-// generateMines(mines, columns, rows);
-console.log(grid);
-// grid[0][0] = 1;
-// grid[10][3] = 1;
-
 window.addEventListener('load', (event) => {
   const button = document.getElementsByTagName("button")[0];
-  console.log(button);
   button.onclick = startGame;
-  // Code to execute after full page load
 });
-
-// grid = [n,m]   // initialize all cells to 0
-// for k = 1 to number_of_mines
-//    get random mine_x and mine_y where grid(mine_x, mine_y) is not a mine
-//    for x = -1 to 1
-//       for y = -1 to 1
-//          if x = 0 and y = 0 then
-//             grid[mine_x, mine_y] = -number_of_mines  // negative value = mine
-//          else 
-//             increment grid[mine_x + x, mine_y + y] by 1
