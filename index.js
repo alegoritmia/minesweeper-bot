@@ -1,6 +1,6 @@
 const rows = 10;
 const columns = 20;
-const mines = 60;
+const mines = 10;
 let grid;
 let gameLost = false;
 let gameText;
@@ -76,7 +76,7 @@ function showAround(col, row) {
       if (y_cord < 0 || y_cord >= rows) continue;
       const secondBox = document.getElementById(`${x_cord}-${y_cord}`);
       if (secondBox.classList.contains("hidden")) {
-        showBoxText(secondBox, x_cord, y_cord);
+        clearBox(x_cord, y_cord);
       }
     }
   }
