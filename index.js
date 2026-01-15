@@ -1,9 +1,16 @@
-const rows = 10;
-const columns = 20;
-const mines = 10;
+let rows = 0;
+let columns = 0;
+let mines = 0;
 let grid;
 let gameLost = false;
 let gameText;
+let difficulty = "beginner";
+
+const dificulties = {
+  beginner: { rows: 9, columns: 9, mines: 10 },
+  intermediate: { rows: 16, columns: 16, mines: 40 },
+  expert: { rows: 16, columns: 30, mines: 99 },
+}
 
 function showGameLost() {
   console.log('game lost');
@@ -189,16 +196,32 @@ function startGame() {
   text.innerHTML = '';
   text.style.display = "none";
   gameLost = false;
+  rows = dificulties[difficulty].rows;
+  columns = dificulties[difficulty].columns;
+  mines = dificulties[difficulty].mines;
   grid = Array.from({length: columns}, e => Array(rows).fill(0))
   generateGrid(columns, rows);
   generateMines(mines, columns, rows);
   // console.log("start game", grid)
 }
 
+function changeDifficulty(diff) {
+  difficulty = diff;
+  startGame();
+}
+
 startGame();
 
 window.addEventListener('load', (event) => {
-  const button = document.getElementsByTagName("button")[0];
+  const button = document.getElementById("restart");
   button.onclick = startGame;
   gameText = document.getElementById("text");
+
+  const beginner = document.getElementById("beginner");
+  const intermediate = document.getElementById("intermediate");
+  const expert = document.getElementById("expert");
+  beginner.onclick = () => changeDifficulty("beginner");
+  intermediate.onclick = () => changeDifficulty("intermediate");
+  expert.onclick = () => changeDifficulty("expert");
+
 });
