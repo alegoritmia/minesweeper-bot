@@ -11,6 +11,12 @@ function showGameLost() {
   gameText.style.display = "block";
 }
 
+function gameWon() {
+  gameLost = true;
+  gameText.innerHTML = "You win :)";
+  gameText.style.display = "block";
+}
+
 // Show text of cell
 function showBoxText(box, col, row) {
   const text = grid[col][row] == -1 ? "X" : grid[col][row] == 0 ? "" : grid[col][row];
@@ -28,7 +34,6 @@ function clearBox(col, row) {
     box.classList.remove("hidden");
     box.classList.add("clicked");
     if (grid[col][row] === -1) {
-      console.log("haha lose");
       gameLost = true;
       showGameLost();
     } else if (grid[col][row] === 0) {
@@ -92,8 +97,16 @@ function boxClick (event) {
   const [x, y] = box.id.split("-").map(cord => parseInt(cord));
   if (box.classList.contains("hidden")) {
     clearBox(x, y);
+    
   } else if (box.classList.contains("clicked")) {
     showAround(x, y);
+  }
+
+  const hidden = document.getElementsByClassName("hidden");
+  const flags = document.getElementsByClassName("flag");
+  console.log("hidden", hidden.length)
+  if (hidden.length + flags.length === mines) {
+    gameWon();
   }
 }
 
@@ -179,7 +192,7 @@ function startGame() {
   grid = Array.from({length: columns}, e => Array(rows).fill(0))
   generateGrid(columns, rows);
   generateMines(mines, columns, rows);
-  console.log("start game", grid)
+  // console.log("start game", grid)
 }
 
 startGame();
